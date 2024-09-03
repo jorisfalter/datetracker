@@ -1,10 +1,49 @@
+"use client"; // Add this line to specify that this is a Client Component
+
 import Image from "next/image";
 import styles from "./page.module.css";
 import EditableTable from "../components/EditableTable";
+import { useState } from "react";
 
 export default function Home() {
+  const [entries, setEntries] = useState([]);
+  const [content, setContent] = useState("");
+
+  const fetchEntries = async () => {
+    const res = await fetch("/api/entries");
+    const data = await res.json();
+    setEntries(data);
+  };
+
+  const addEntry = async () => {
+    await fetch("/api/entries", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ content }),
+    });
+    fetchEntries();
+    setContent("");
+  };
+
   return (
     <main className={styles.main}>
+      <div>
+        <h1>SQLite with Next.js</h1>
+        <input
+          type="text"
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+        />
+        <button onClick={addEntry}>Add Entry</button>
+        <button onClick={fetchEntries}>Load Entries</button>
+        <ul>
+          {entries.map((entry) => (
+            <li key={entry.id}>{entry.content}</li>
+          ))}
+        </ul>
+      </div>
       <div style={{ padding: "20px" }}>
         <h1>Editable Table</h1>
         <EditableTable />
