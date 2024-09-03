@@ -1,9 +1,14 @@
 import Image from "next/image";
 import styles from "./page.module.css";
+import EditableTable from "../components/EditableTable";
 
 export default function Home() {
   return (
     <main className={styles.main}>
+      <div style={{ padding: "20px" }}>
+        <h1>Editable Table</h1>
+        <EditableTable />
+      </div>
       <div className={styles.description}>
         <p>
           BlaBlaBla! Get started by editing&nbsp;
