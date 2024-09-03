@@ -1,3 +1,12 @@
+Purpose of tool: store important dates and send automated emails
+Tech: NextJS; SqLite;
+Deployed on Vercel
+Need to implement an email program
+
+Need to do "npm run build" before deploying!
+
+##################### From the template readme
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
