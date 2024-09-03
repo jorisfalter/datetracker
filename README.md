@@ -1,7 +1,8 @@
 Purpose of tool: store important dates and send automated emails
+
 Tech: NextJS; SqLite;
 Deployed on Vercel
-Need to implement an email program
+Need to implement an email program, Postmark
 
 Need to do "npm run build" before deploying!
 
