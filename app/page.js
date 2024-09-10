@@ -31,6 +31,8 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <div>
+        <h1>React Table</h1>
+        <ReactTable />
         <h1>SQLite with Next.js</h1>
         <input
           type="text"
@@ -47,13 +49,12 @@ export default function Home() {
       </div>
 
       <div style={{ padding: "20px" }}>
-        <h1>React Table</h1>
-        <ReactTable />
         <h1>Editable Table</h1>
         <EditableTable />
       </div>
+      <h1>Old Content</h1>
+
       <div className={styles.description}>
-        <h1>Old Content</h1>
         <p>
           BlaBlaBla! Get started by editing&nbsp;
           <code className={styles.code}>app/page.js</code>
