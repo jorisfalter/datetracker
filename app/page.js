@@ -3,6 +3,7 @@
 import Image from "next/image";
 import styles from "./page.module.css";
 import EditableTable from "../components/EditableTable";
+import ReactTable from "../components/reactTable";
 import { useState } from "react";
 
 export default function Home() {
@@ -44,11 +45,15 @@ export default function Home() {
           ))}
         </ul>
       </div>
+
       <div style={{ padding: "20px" }}>
+        <h1>React Table</h1>
+        <ReactTable />
         <h1>Editable Table</h1>
         <EditableTable />
       </div>
       <div className={styles.description}>
+        <h1>Old Content</h1>
         <p>
           BlaBlaBla! Get started by editing&nbsp;
           <code className={styles.code}>app/page.js</code>
