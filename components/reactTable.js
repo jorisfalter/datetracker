@@ -13,9 +13,9 @@ export default function EditableReactTable() {
 
   // Initial table data
   const [data, setData] = useState([
-    { col1: "Hello", col2: "World" },
-    { col1: "react-table", col2: "rocks" },
-    { col1: "whatever", col2: "you want" },
+    { col1: "Hello", col2: "World", col3: 10, col4: "Option1" },
+    { col1: "react-table", col2: "rocks", col3: 20, col4: "Option2" },
+    { col1: "whatever", col2: "you want", col3: 30, col4: "Option1" },
   ]);
 
   // Track which cell is being edited (row index and column key)
@@ -33,8 +33,9 @@ export default function EditableReactTable() {
 
   // Define table columns
   const columns = [
+    // First column as string
     columnHelper.accessor("col1", {
-      header: "Column 1",
+      header: "Column 1 (String)",
       cell: (info) => {
         const rowIdx = info.row.index;
         return editingCell.rowIdx === rowIdx &&
@@ -45,10 +46,10 @@ export default function EditableReactTable() {
             onChange={(e) => handleCellChange(rowIdx, "col1", e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                setEditingCell({ rowIdx: null, colKey: null }); // Exit edit mode on Enter key
+                setEditingCell({ rowIdx: null, colKey: null });
               }
             }}
-            onBlur={() => setEditingCell({ rowIdx: null, colKey: null })} // Exit edit mode when focus is lost
+            onBlur={() => setEditingCell({ rowIdx: null, colKey: null })}
             autoFocus
           />
         ) : (
@@ -58,8 +59,10 @@ export default function EditableReactTable() {
         );
       },
     }),
+
+    // Second column as string
     columnHelper.accessor("col2", {
-      header: "Column 2",
+      header: "Column 2 (String)",
       cell: (info) => {
         const rowIdx = info.row.index;
         return editingCell.rowIdx === rowIdx &&
@@ -70,14 +73,66 @@ export default function EditableReactTable() {
             onChange={(e) => handleCellChange(rowIdx, "col2", e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                setEditingCell({ rowIdx: null, colKey: null }); // Exit edit mode on Enter key
+                setEditingCell({ rowIdx: null, colKey: null });
               }
             }}
-            onBlur={() => setEditingCell({ rowIdx: null, colKey: null })} // Exit edit mode when focus is lost
+            onBlur={() => setEditingCell({ rowIdx: null, colKey: null })}
             autoFocus
           />
         ) : (
           <span onClick={() => setEditingCell({ rowIdx, colKey: "col2" })}>
+            {info.getValue()}
+          </span>
+        );
+      },
+    }),
+
+    // Third column as integer
+    columnHelper.accessor("col3", {
+      header: "Column 3 (Int)",
+      cell: (info) => {
+        const rowIdx = info.row.index;
+        return editingCell.rowIdx === rowIdx &&
+          editingCell.colKey === "col3" ? (
+          <input
+            type="number"
+            value={data[rowIdx]["col3"]}
+            onChange={(e) => handleCellChange(rowIdx, "col3", e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                setEditingCell({ rowIdx: null, colKey: null });
+              }
+            }}
+            onBlur={() => setEditingCell({ rowIdx: null, colKey: null })}
+            autoFocus
+          />
+        ) : (
+          <span onClick={() => setEditingCell({ rowIdx, colKey: "col3" })}>
+            {info.getValue()}
+          </span>
+        );
+      },
+    }),
+
+    // Fourth column as dropdown
+    columnHelper.accessor("col4", {
+      header: "Column 4 (Dropdown)",
+      cell: (info) => {
+        const rowIdx = info.row.index;
+        return editingCell.rowIdx === rowIdx &&
+          editingCell.colKey === "col4" ? (
+          <select
+            value={data[rowIdx]["col4"]}
+            onChange={(e) => handleCellChange(rowIdx, "col4", e.target.value)}
+            onBlur={() => setEditingCell({ rowIdx: null, colKey: null })}
+            autoFocus
+          >
+            <option value="Option1">Option 1</option>
+            <option value="Option2">Option 2</option>
+            <option value="Option3">Option 3</option>
+          </select>
+        ) : (
+          <span onClick={() => setEditingCell({ rowIdx, colKey: "col4" })}>
             {info.getValue()}
           </span>
         );
