@@ -31,9 +31,12 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <div>
-        <h1>React Table</h1>
+        <h1>Hello! </h1>
+        <br></br>
+        <h2>Please enter your important dates below:</h2>
+        <br></br>
         <ReactTable />
-        <h1>SQLite with Next.js</h1>
+        {/* <h1>SQLite with Next.js</h1>
         <input
           type="text"
           value={content}
@@ -138,7 +141,7 @@ export default function Home() {
           <p>
             Instantly deploy your Next.js site to a shareable URL with Vercel.
           </p>
-        </a>
+        </a> */}
       </div>
     </main>
   );
