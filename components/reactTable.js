@@ -24,6 +24,9 @@ export default function EditableReactTable() {
     colKey: null,
   });
 
+  // Email input state
+  const [email, setEmail] = useState("");
+
   // Handle updating the cell value
   const handleCellChange = (rowIdx, colKey, value) => {
     const updatedData = [...data];
@@ -31,9 +34,13 @@ export default function EditableReactTable() {
     setData(updatedData);
   };
 
+  // Handle email input change
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
   // Define table columns
   const columns = [
-    // First column as string
     columnHelper.accessor("col1", {
       header: "Column 1 (String)",
       cell: (info) => {
@@ -59,8 +66,6 @@ export default function EditableReactTable() {
         );
       },
     }),
-
-    // Second column as string
     columnHelper.accessor("col2", {
       header: "Column 2 (String)",
       cell: (info) => {
@@ -86,8 +91,6 @@ export default function EditableReactTable() {
         );
       },
     }),
-
-    // Third column as integer
     columnHelper.accessor("col3", {
       header: "Column 3 (Int)",
       cell: (info) => {
@@ -113,8 +116,6 @@ export default function EditableReactTable() {
         );
       },
     }),
-
-    // Fourth column as dropdown
     columnHelper.accessor("col4", {
       header: "Column 4 (Dropdown)",
       cell: (info) => {
@@ -148,38 +149,53 @@ export default function EditableReactTable() {
   });
 
   return (
-    <table style={{ border: "1px solid black", width: "100%" }}>
-      <thead>
-        {table.getHeaderGroups().map((headerGroup) => (
-          <tr key={headerGroup.id}>
-            {headerGroup.headers.map((header) => (
-              <th
-                key={header.id}
-                style={{ padding: "10px", border: "1px solid black" }}
-              >
-                {flexRender(
-                  header.column.columnDef.header,
-                  header.getContext()
-                )}
-              </th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody>
-        {table.getRowModel().rows.map((row) => (
-          <tr key={row.id}>
-            {row.getVisibleCells().map((cell) => (
-              <td
-                key={cell.id}
-                style={{ padding: "10px", border: "1px solid black" }}
-              >
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <div>
+      <table style={{ border: "1px solid black", width: "100%" }}>
+        <thead>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <th
+                  key={header.id}
+                  style={{ padding: "10px", border: "1px solid black" }}
+                >
+                  {flexRender(
+                    header.column.columnDef.header,
+                    header.getContext()
+                  )}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody>
+          {table.getRowModel().rows.map((row) => (
+            <tr key={row.id}>
+              {row.getVisibleCells().map((cell) => (
+                <td
+                  key={cell.id}
+                  style={{ padding: "10px", border: "1px solid black" }}
+                >
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      {/* Email Input Field */}
+      <div style={{ marginTop: "20px" }}>
+        <label htmlFor="email">Customer Email: </label>
+        <input
+          type="email"
+          id="email"
+          value={email}
+          onChange={handleEmailChange}
+          placeholder="Enter customer email"
+          style={{ padding: "5px", marginTop: "10px", width: "300px" }}
+        />
+      </div>
+    </div>
   );
 }
