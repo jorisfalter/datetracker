@@ -48,7 +48,7 @@ export default function EditableReactTable() {
   const columns = [
     // First column as string
     columnHelper.accessor("col1", {
-      header: "Column 1 (String)",
+      header: "Who?",
       cell: (info) => {
         const rowIdx = info.row.index;
         return editingCell.rowIdx === rowIdx &&
@@ -73,7 +73,7 @@ export default function EditableReactTable() {
 
     // Second column as string
     columnHelper.accessor("col2", {
-      header: "Column 2 (String)",
+      header: "What?",
       cell: (info) => {
         const rowIdx = info.row.index;
         return editingCell.rowIdx === rowIdx &&
@@ -98,7 +98,7 @@ export default function EditableReactTable() {
 
     // Third column as integer
     columnHelper.accessor("col3", {
-      header: "Column 3 (Int)",
+      header: "Day",
       cell: (info) => {
         const rowIdx = info.row.index;
         return editingCell.rowIdx === rowIdx &&
@@ -123,7 +123,7 @@ export default function EditableReactTable() {
 
     // Fourth column as dropdown
     columnHelper.accessor("col4", {
-      header: "Column 4 (Dropdown)",
+      header: "Month",
       cell: (info) => {
         const rowIdx = info.row.index;
         return editingCell.rowIdx === rowIdx &&
