@@ -2,7 +2,7 @@ Purpose of tool: store important dates and send automated emails
 
 Tech: NextJS; SqLite;
 Deployed on Vercel
-tanstack reacttable
+tanstack reacttable - https://www.npmjs.com/package/react-table
 Need to implement an email program, Postmark
 
 Need to do "npm run build" before deploying!
