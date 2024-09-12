@@ -186,13 +186,13 @@ export default function EditableReactTable() {
 
       {/* Email Input Field */}
       <div style={{ marginTop: "20px" }}>
-        <label htmlFor="email">Customer Email: </label>
+        <label htmlFor="email">Your Email: </label>
         <input
           type="email"
           id="email"
           value={email}
           onChange={handleEmailChange}
-          placeholder="Enter customer email"
+          placeholder="Enter your email"
           style={{ padding: "5px", marginTop: "10px", width: "300px" }}
         />
       </div>
