@@ -33,7 +33,7 @@ export default function Home() {
       <div>
         <h1>Hello! </h1>
         <br></br>
-        <h2>Please enter your important dates below:</h2>
+        <h2>Go ahead, enter your important dates in the table:</h2>
         <br></br>
         <ReactTable />
         {/* <h1>SQLite with Next.js</h1>

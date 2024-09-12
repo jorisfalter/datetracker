@@ -44,9 +44,18 @@ export default function EditableReactTable() {
     setEmail(e.target.value);
   };
 
+  // Function to add a new empty row when editing the last row
+  const addNewRow = (rowIdx) => {
+    if (rowIdx === data.length - 1) {
+      setData((prevData) => [
+        ...prevData,
+        { col1: "", col2: "", col3: "", col4: "January" },
+      ]);
+    }
+  };
+
   // Define table columns
   const columns = [
-    // First column as string
     columnHelper.accessor("col1", {
       header: "Who?",
       cell: (info) => {
@@ -71,7 +80,6 @@ export default function EditableReactTable() {
       },
     }),
 
-    // Second column as string
     columnHelper.accessor("col2", {
       header: "What?",
       cell: (info) => {
@@ -96,7 +104,6 @@ export default function EditableReactTable() {
       },
     }),
 
-    // Third column as integer
     columnHelper.accessor("col3", {
       header: "Day",
       cell: (info) => {
@@ -121,7 +128,6 @@ export default function EditableReactTable() {
       },
     }),
 
-    // Fourth column as dropdown
     columnHelper.accessor("col4", {
       header: "Month",
       cell: (info) => {
@@ -162,13 +168,18 @@ export default function EditableReactTable() {
   });
 
   return (
-    <div>
+    <div
+      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+    >
+      {" "}
+      {/* Centers both the table and email input */}
       <table
         style={{
           border: "1px solid black",
-          width: "100%",
+          width: "80%",
           tableLayout: "fixed", // Fixes the column width
           backgroundColor: "#f5f5f5", // Different background color
+          textAlign: "center",
         }}
       >
         <thead>
@@ -212,12 +223,13 @@ export default function EditableReactTable() {
                     border: "1px solid black",
                     width: "25%", // Equal width for all cells
                   }}
-                  onClick={() =>
+                  onClick={() => {
                     setEditingCell({
                       rowIdx: row.index,
                       colKey: cell.column.id,
-                    })
-                  }
+                    });
+                    addNewRow(row.index); // Add a new row when clicking the last row
+                  }}
                 >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
@@ -226,17 +238,16 @@ export default function EditableReactTable() {
           ))}
         </tbody>
       </table>
-
       {/* Email Input Field */}
       <div style={{ marginTop: "20px" }}>
-        <label htmlFor="email">Customer Email: </label>
+        <label htmlFor="email">Your Email: </label>
         <input
           type="email"
           id="email"
           value={email}
           onChange={handleEmailChange}
-          placeholder="Enter customer email"
-          style={{ padding: "5px", marginTop: "10px", width: "300px" }}
+          placeholder="Enter your email"
+          style={{ padding: "5px", marginTop: "10px", width: "200px" }}
         />
       </div>
     </div>
