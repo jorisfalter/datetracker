@@ -13,9 +13,14 @@ export default function EditableReactTable() {
 
   // Initial table data
   const [data, setData] = useState([
-    { col1: "Hello", col2: "World", col3: 10, col4: "Option1" },
-    { col1: "react-table", col2: "rocks", col3: 20, col4: "Option2" },
-    { col1: "whatever", col2: "you want", col3: 30, col4: "Option1" },
+    { col1: "Fred the Example", col2: "Birthday", col3: 10, col4: "January" },
+    {
+      col1: "Tina and Gerard",
+      col2: "Wedding Anniversary",
+      col3: 20,
+      col4: "October",
+    },
+    { col1: "...", col2: "...", col3: "", col4: "" },
   ]);
 
   // Track which cell is being edited (row index and column key)
@@ -41,6 +46,7 @@ export default function EditableReactTable() {
 
   // Define table columns
   const columns = [
+    // First column as string
     columnHelper.accessor("col1", {
       header: "Column 1 (String)",
       cell: (info) => {
@@ -60,12 +66,12 @@ export default function EditableReactTable() {
             autoFocus
           />
         ) : (
-          <span onClick={() => setEditingCell({ rowIdx, colKey: "col1" })}>
-            {info.getValue()}
-          </span>
+          <span>{info.getValue()}</span>
         );
       },
     }),
+
+    // Second column as string
     columnHelper.accessor("col2", {
       header: "Column 2 (String)",
       cell: (info) => {
@@ -85,12 +91,12 @@ export default function EditableReactTable() {
             autoFocus
           />
         ) : (
-          <span onClick={() => setEditingCell({ rowIdx, colKey: "col2" })}>
-            {info.getValue()}
-          </span>
+          <span>{info.getValue()}</span>
         );
       },
     }),
+
+    // Third column as integer
     columnHelper.accessor("col3", {
       header: "Column 3 (Int)",
       cell: (info) => {
@@ -110,12 +116,12 @@ export default function EditableReactTable() {
             autoFocus
           />
         ) : (
-          <span onClick={() => setEditingCell({ rowIdx, colKey: "col3" })}>
-            {info.getValue()}
-          </span>
+          <span>{info.getValue()}</span>
         );
       },
     }),
+
+    // Fourth column as dropdown
     columnHelper.accessor("col4", {
       header: "Column 4 (Dropdown)",
       cell: (info) => {
@@ -128,14 +134,21 @@ export default function EditableReactTable() {
             onBlur={() => setEditingCell({ rowIdx: null, colKey: null })}
             autoFocus
           >
-            <option value="Option1">Option 1</option>
-            <option value="Option2">Option 2</option>
-            <option value="Option3">Option 3</option>
+            <option value="January">January</option>
+            <option value="February">February</option>
+            <option value="March">March</option>
+            <option value="April">April</option>
+            <option value="May">May</option>
+            <option value="June">June</option>
+            <option value="July">July</option>
+            <option value="August">August</option>
+            <option value="September">September</option>
+            <option value="October">October</option>
+            <option value="November">November</option>
+            <option value="December">December</option>
           </select>
         ) : (
-          <span onClick={() => setEditingCell({ rowIdx, colKey: "col4" })}>
-            {info.getValue()}
-          </span>
+          <span>{info.getValue()}</span>
         );
       },
     }),
@@ -174,7 +187,17 @@ export default function EditableReactTable() {
               {row.getVisibleCells().map((cell) => (
                 <td
                   key={cell.id}
-                  style={{ padding: "10px", border: "1px solid black" }}
+                  style={{
+                    padding: "10px",
+                    border: "1px solid black",
+                    cursor: "pointer",
+                  }}
+                  onClick={() =>
+                    setEditingCell({
+                      rowIdx: row.index,
+                      colKey: cell.column.id,
+                    })
+                  }
                 >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
@@ -186,13 +209,13 @@ export default function EditableReactTable() {
 
       {/* Email Input Field */}
       <div style={{ marginTop: "20px" }}>
-        <label htmlFor="email">Your Email: </label>
+        <label htmlFor="email">Customer Email: </label>
         <input
           type="email"
           id="email"
           value={email}
           onChange={handleEmailChange}
-          placeholder="Enter your email"
+          placeholder="Enter customer email"
           style={{ padding: "5px", marginTop: "10px", width: "300px" }}
         />
       </div>
