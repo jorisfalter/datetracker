@@ -49,7 +49,7 @@ export default function EditableReactTable() {
     if (rowIdx === data.length - 1) {
       setData((prevData) => [
         ...prevData,
-        { col1: "", col2: "", col3: "", col4: "January" },
+        { col1: "...", col2: "", col3: "", col4: "" },
       ]);
     }
   };
