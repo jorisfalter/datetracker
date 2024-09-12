@@ -163,14 +163,25 @@ export default function EditableReactTable() {
 
   return (
     <div>
-      <table style={{ border: "1px solid black", width: "100%" }}>
+      <table
+        style={{
+          border: "1px solid black",
+          width: "100%",
+          tableLayout: "fixed", // Fixes the column width
+          backgroundColor: "#f5f5f5", // Different background color
+        }}
+      >
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
                 <th
                   key={header.id}
-                  style={{ padding: "10px", border: "1px solid black" }}
+                  style={{
+                    padding: "10px",
+                    border: "1px solid black",
+                    width: "25%", // Equal width for all columns
+                  }}
                 >
                   {flexRender(
                     header.column.columnDef.header,
@@ -183,14 +194,23 @@ export default function EditableReactTable() {
         </thead>
         <tbody>
           {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
+            <tr
+              key={row.id}
+              style={{ cursor: "pointer" }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "#e0e0e0"; // Hover color
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = ""; // Reset color on mouse leave
+              }}
+            >
               {row.getVisibleCells().map((cell) => (
                 <td
                   key={cell.id}
                   style={{
                     padding: "10px",
                     border: "1px solid black",
-                    cursor: "pointer",
+                    width: "25%", // Equal width for all cells
                   }}
                   onClick={() =>
                     setEditingCell({
