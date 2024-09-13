@@ -32,6 +32,7 @@ export default function EditableReactTable() {
   // Email input state and timeout for inactivity
   const [email, setEmail] = useState("");
   const [timeoutId, setTimeoutId] = useState(null);
+  const [submitted, setSubmitted] = useState(false); // Flag to prevent double submission
 
   // Email validation
   const isValidEmail = (email) => {
@@ -41,7 +42,9 @@ export default function EditableReactTable() {
 
   // Function to submit data to the API
   const submitData = async () => {
-    if (isValidEmail(email)) {
+    if (!submitted && isValidEmail(email)) {
+      setSubmitted(true); // Mark as submitted
+
       try {
         const response = await fetch("/api/entries", {
           method: "POST",
@@ -54,7 +57,7 @@ export default function EditableReactTable() {
         console.log(JSON.stringify({ data, email }));
 
         if (response.ok) {
-          alert("Data sent to Api successfully!");
+          alert("Data sent to API successfully!");
         } else {
           alert("Failed to submit data.");
         }
@@ -62,14 +65,13 @@ export default function EditableReactTable() {
         console.error("Error submitting data:", error);
         alert("Error submitting data.");
       }
-    } else {
-      alert("Please enter a valid email address.");
     }
   };
 
   // Handle email input change with a 5-second delay to auto-submit
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
+    setSubmitted(false); // Reset submission flag when email changes
 
     // Clear any existing timeout to prevent premature submission
     if (timeoutId) {
@@ -88,7 +90,7 @@ export default function EditableReactTable() {
 
   // Handle blur event on the email input field
   const handleEmailBlur = () => {
-    if (isValidEmail(email)) {
+    if (!submitted && isValidEmail(email)) {
       submitData();
     }
   };
