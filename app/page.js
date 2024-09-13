@@ -31,7 +31,10 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <div>
-        <h1>Hello! </h1>
+        <h1>
+          Never Forget Your Wedding Anniversary, Your Best Friend's Wedding,
+          ...!{" "}
+        </h1>
         <br></br>
         <h2>Go ahead, enter your important dates in the table:</h2>
         <br></br>
