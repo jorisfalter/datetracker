@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   createColumnHelper,
   useReactTable,
@@ -29,19 +29,75 @@ export default function EditableReactTable() {
     colKey: null,
   });
 
-  // Email input state
+  // Email input state and timeout for inactivity
   const [email, setEmail] = useState("");
+  const [timeoutId, setTimeoutId] = useState(null);
+
+  // Email validation
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  // Function to submit data to the API
+  const submitData = async () => {
+    if (isValidEmail(email)) {
+      try {
+        const response = await fetch("/api/entries", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ data, email }),
+        });
+
+        console.log(JSON.stringify({ data, email }));
+
+        if (response.ok) {
+          alert("Data sent to Api successfully!");
+        } else {
+          alert("Failed to submit data.");
+        }
+      } catch (error) {
+        console.error("Error submitting data:", error);
+        alert("Error submitting data.");
+      }
+    } else {
+      alert("Please enter a valid email address.");
+    }
+  };
+
+  // Handle email input change with a 5-second delay to auto-submit
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+
+    // Clear any existing timeout to prevent premature submission
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+
+    // Set a new timeout to auto-submit after 5 seconds of inactivity
+    const newTimeoutId = setTimeout(() => {
+      if (isValidEmail(e.target.value)) {
+        submitData();
+      }
+    }, 5000);
+
+    setTimeoutId(newTimeoutId);
+  };
+
+  // Handle blur event on the email input field
+  const handleEmailBlur = () => {
+    if (isValidEmail(email)) {
+      submitData();
+    }
+  };
 
   // Handle updating the cell value
   const handleCellChange = (rowIdx, colKey, value) => {
     const updatedData = [...data];
     updatedData[rowIdx][colKey] = value;
     setData(updatedData);
-  };
-
-  // Handle email input change
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
   };
 
   // Function to add a new empty row when editing the last row
@@ -171,7 +227,6 @@ export default function EditableReactTable() {
     <div
       style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
-      {" "}
       {/* Centers both the table and email input */}
       <table
         style={{
@@ -246,6 +301,7 @@ export default function EditableReactTable() {
           id="email"
           value={email}
           onChange={handleEmailChange}
+          onBlur={handleEmailBlur} // Submit on blur
           placeholder="Enter your email"
           style={{ padding: "5px", marginTop: "10px", width: "200px" }}
         />

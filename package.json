@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@sqlitecloud/drivers": "^1.0.255",
     "@tanstack/react-table": "^8.20.5",
     "better-sqlite3": "^11.2.1",
     "next": "14.2.7",
