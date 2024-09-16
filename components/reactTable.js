@@ -115,6 +115,14 @@ export default function EditableReactTable() {
       // Set focus to the next cell
       setEditingCell({ rowIdx: nextRowIdx, colKey: nextColKey });
     }
+    if (e.key === "Enter") {
+      e.preventDefault(); // Prevent the default behavior
+      setEditingCell({ rowIdx: null, colKey: null }); // Exit editing mode
+    }
+    // Doesn't work yet // Do not prevent the default behavior for arrow keys
+    if (colKey === "col4" && (e.key === "ArrowDown" || e.key === "ArrowUp")) {
+      // Let the default dropdown navigation work
+    }
   };
 
   // Function to add a new empty row when editing the last row
