@@ -29,10 +29,8 @@ export default function EditableReactTable() {
     colKey: null,
   });
 
-  // Email input state and timeout for inactivity
   const [email, setEmail] = useState("");
-  const [timeoutId, setTimeoutId] = useState(null);
-  const [submitted, setSubmitted] = useState(false); // Flag to prevent double submission
+  const [submitted, setSubmitted] = useState(false);
 
   // Email validation
   const isValidEmail = (email) => {
@@ -41,65 +39,82 @@ export default function EditableReactTable() {
   };
 
   // Function to submit data to the API
-  const submitData = async () => {
-    if (!submitted && isValidEmail(email)) {
-      setSubmitted(true); // Mark as submitted
-
+  const submitData = async (updatedData) => {
+    if (isValidEmail(email)) {
       try {
         const response = await fetch("/api/entries", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ data, email }),
+          body: JSON.stringify({ data: updatedData, email }),
         });
 
-        console.log(JSON.stringify({ data, email }));
+        console.log(JSON.stringify({ data: updatedData, email }));
 
         if (response.ok) {
-          alert("Data sent to API successfully!");
+          console.log("Data sent to API successfully!");
         } else {
-          alert("Failed to submit data.");
+          console.error("Failed to submit data.");
         }
       } catch (error) {
         console.error("Error submitting data:", error);
-        alert("Error submitting data.");
       }
+    } else {
+      console.error("Invalid email, cannot submit data.");
     }
   };
 
-  // Handle email input change with a 5-second delay to auto-submit
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-    setSubmitted(false); // Reset submission flag when email changes
-
-    // Clear any existing timeout to prevent premature submission
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
-
-    // Set a new timeout to auto-submit after 5 seconds of inactivity
-    const newTimeoutId = setTimeout(() => {
-      if (isValidEmail(e.target.value)) {
-        submitData();
-      }
-    }, 5000);
-
-    setTimeoutId(newTimeoutId);
-  };
-
-  // Handle blur event on the email input field
-  const handleEmailBlur = () => {
-    if (!submitted && isValidEmail(email)) {
-      submitData();
-    }
-  };
-
-  // Handle updating the cell value
+  // Handle cell value changes
   const handleCellChange = (rowIdx, colKey, value) => {
     const updatedData = [...data];
     updatedData[rowIdx][colKey] = value;
     setData(updatedData);
+  };
+
+  // Handle cell blur event (when user clicks away from a cell)
+  const handleCellBlur = (rowIdx, colKey) => {
+    // Submit data when the user finishes editing a cell
+    submitData(data);
+    setEditingCell({ rowIdx: null, colKey: null });
+  };
+
+  // Handle email input change
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+    setSubmitted(false);
+  };
+
+  // Handle email input blur (when user clicks away from the email input)
+  const handleEmailBlur = () => {
+    // Submit data when the user finishes entering the email
+    submitData(data);
+  };
+
+  const handleKeyDown = (e, rowIdx, colKey) => {
+    if (e.key === "Tab") {
+      e.preventDefault(); // Prevent the default tab behavior
+
+      // Determine the next cell's row and column based on the current position
+      let nextRowIdx = rowIdx;
+      let nextColKey = colKey;
+
+      // Define the order of columns (you can adjust this as needed)
+      const columns = ["col1", "col2", "col3", "col4"];
+      const currentColIndex = columns.indexOf(colKey);
+
+      if (currentColIndex < columns.length - 1) {
+        // Move to the next column in the same row
+        nextColKey = columns[currentColIndex + 1];
+      } else {
+        // Move to the first column of the next row
+        nextRowIdx = rowIdx + 1;
+        nextColKey = columns[0];
+      }
+
+      // Set focus to the next cell
+      setEditingCell({ rowIdx: nextRowIdx, colKey: nextColKey });
+    }
   };
 
   // Function to add a new empty row when editing the last row
@@ -124,12 +139,8 @@ export default function EditableReactTable() {
             type="text"
             value={data[rowIdx]["col1"]}
             onChange={(e) => handleCellChange(rowIdx, "col1", e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                setEditingCell({ rowIdx: null, colKey: null });
-              }
-            }}
-            onBlur={() => setEditingCell({ rowIdx: null, colKey: null })}
+            onBlur={() => handleCellBlur(rowIdx, "col1")}
+            onKeyDown={(e) => handleKeyDown(e, rowIdx, "col1")}
             autoFocus
           />
         ) : (
@@ -148,12 +159,8 @@ export default function EditableReactTable() {
             type="text"
             value={data[rowIdx]["col2"]}
             onChange={(e) => handleCellChange(rowIdx, "col2", e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                setEditingCell({ rowIdx: null, colKey: null });
-              }
-            }}
-            onBlur={() => setEditingCell({ rowIdx: null, colKey: null })}
+            onBlur={() => handleCellBlur(rowIdx, "col2")}
+            onKeyDown={(e) => handleKeyDown(e, rowIdx, "col2")}
             autoFocus
           />
         ) : (
@@ -172,12 +179,8 @@ export default function EditableReactTable() {
             type="number"
             value={data[rowIdx]["col3"]}
             onChange={(e) => handleCellChange(rowIdx, "col3", e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                setEditingCell({ rowIdx: null, colKey: null });
-              }
-            }}
-            onBlur={() => setEditingCell({ rowIdx: null, colKey: null })}
+            onBlur={() => handleCellBlur(rowIdx, "col3")}
+            onKeyDown={(e) => handleKeyDown(e, rowIdx, "col3")}
             autoFocus
           />
         ) : (
@@ -195,8 +198,10 @@ export default function EditableReactTable() {
           <select
             value={data[rowIdx]["col4"]}
             onChange={(e) => handleCellChange(rowIdx, "col4", e.target.value)}
-            onBlur={() => setEditingCell({ rowIdx: null, colKey: null })}
-            autoFocus
+            onBlur={() => handleCellBlur(rowIdx, "col4")}
+            onKeyDown={(e) => handleKeyDown(e, rowIdx, "col4")}
+            // autoFocus // Remove autoFocus to prevent dropdown from closing immediately
+            onClick={(e) => e.stopPropagation()} // Stop propagation to prevent blur issues
           >
             <option value="January">January</option>
             <option value="February">February</option>
@@ -229,13 +234,12 @@ export default function EditableReactTable() {
     <div
       style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
-      {/* Centers both the table and email input */}
       <table
         style={{
           border: "1px solid black",
           width: "80%",
-          tableLayout: "fixed", // Fixes the column width
-          backgroundColor: "#f5f5f5", // Different background color
+          tableLayout: "fixed",
+          backgroundColor: "#f5f5f5",
           textAlign: "center",
         }}
       >
@@ -248,7 +252,7 @@ export default function EditableReactTable() {
                   style={{
                     padding: "10px",
                     border: "1px solid black",
-                    width: "25%", // Equal width for all columns
+                    width: "25%",
                   }}
                 >
                   {flexRender(
@@ -266,10 +270,10 @@ export default function EditableReactTable() {
               key={row.id}
               style={{ cursor: "pointer" }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#e0e0e0"; // Hover color
+                e.currentTarget.style.backgroundColor = "#e0e0e0";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = ""; // Reset color on mouse leave
+                e.currentTarget.style.backgroundColor = "";
               }}
             >
               {row.getVisibleCells().map((cell) => (
@@ -278,7 +282,7 @@ export default function EditableReactTable() {
                   style={{
                     padding: "10px",
                     border: "1px solid black",
-                    width: "25%", // Equal width for all cells
+                    width: "25%",
                   }}
                   onClick={() => {
                     setEditingCell({
