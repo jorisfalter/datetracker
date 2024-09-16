@@ -116,21 +116,31 @@ h2 {
   color:blue;
 }
 
-.rotatingSentence {
-  animation: fade 1.5s ease-in-out infinite;
+
+.typingSentence {
+  font-family: monospace;
+  white-space: nowrap;
 }
 
-@keyframes fade {
-  0% {
-    opacity: 0;
+.dynamicText {
+  color: #ff6347; /* Change this color as you like (tomato color) */
+  font-weight: bold;
+}
+
+.cursor {
+  border-right: 2px solid;
+  animation: blink-caret 0.75s step-end infinite;
+}
+
+/* Blinking caret animation */
+@keyframes blink-caret {
+  from, to {
+    border-color: transparent;
   }
-  10% {
-    opacity: 1;
-  }
-  90% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
+  50% {
+    border-color: black;
   }
 }
+
+
+

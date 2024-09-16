@@ -1,8 +1,6 @@
 "use client"; // Add this line to specify that this is a Client Component
 
-import Image from "next/image";
 import styles from "./page.module.css";
-import EditableTable from "../components/EditableTable";
 import ReactTable from "../components/reactTable";
 import { useState, useEffect } from "react";
 
@@ -10,11 +8,16 @@ export default function Home() {
   const [entries, setEntries] = useState([]);
   const [content, setContent] = useState("");
   const [currentSentenceIndex, setCurrentSentenceIndex] = useState(0);
+  const [displayedDynamicText, setDisplayedDynamicText] = useState("");
 
-  const sentences = [
-    "Never forget Your Wedding Anniversary",
-    "Never forget Your Best Friend's Birthday",
-    "Never forget Any Emotional Important Date",
+  // Static part of the sentence
+  const staticText = "Never forget ";
+
+  // Dynamic parts that change
+  const dynamicParts = [
+    "Your Wedding Anniversary",
+    "Your Best Friend's Birthday",
+    "Any Emotional Important Date",
   ];
 
   const fetchEntries = async () => {
@@ -35,21 +38,43 @@ export default function Home() {
     setContent("");
   };
 
-  // Rotate sentences every 3 seconds
+  // Typing effect for dynamic part of the sentence
+  useEffect(() => {
+    let charIndex = 0;
+    const currentDynamicPart = dynamicParts[currentSentenceIndex];
+
+    // Reset the displayed dynamic text
+    setDisplayedDynamicText("");
+
+    const typeInterval = setInterval(() => {
+      if (charIndex < currentDynamicPart.length) {
+        setDisplayedDynamicText((prev) => prev + currentDynamicPart[charIndex]);
+        charIndex++;
+      } else {
+        clearInterval(typeInterval); // Stop typing when the sentence is fully typed out
+      }
+    }, 100); // Typing speed (100ms per character)
+
+    return () => clearInterval(typeInterval); // Cleanup on sentence change or unmount
+  }, [currentSentenceIndex]);
+
+  // Rotate dynamic parts every 5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSentenceIndex(
-        (prevIndex) => (prevIndex + 1) % sentences.length
+        (prevIndex) => (prevIndex + 1) % dynamicParts.length
       );
-    }, 3000); // Change sentence every 3 seconds
+    }, 5000); // Rotate every 5 seconds
     return () => clearInterval(interval); // Cleanup on unmount
-  }, [sentences.length]);
+  }, [dynamicParts.length]);
 
   return (
     <main className={styles.main}>
       <div>
-        <h1 className={styles.rotatingSentence}>
-          {sentences[currentSentenceIndex]}
+        <h1 className={styles.typingSentence}>
+          {staticText}
+          <span className={styles.dynamicText}>{displayedDynamicText}</span>
+          <span className={styles.cursor}>|</span>
         </h1>
         <br />
         <h2>Go ahead, enter your important dates in the table:</h2>
