@@ -43,12 +43,14 @@ export default function Home() {
     let charIndex = 0;
     const currentDynamicPart = dynamicParts[currentSentenceIndex];
 
-    // Reset the displayed dynamic text
+    // Ensure we clear the dynamic text before starting the new sentence
     setDisplayedDynamicText("");
 
     const typeInterval = setInterval(() => {
       if (charIndex < currentDynamicPart.length) {
-        setDisplayedDynamicText((prev) => prev + currentDynamicPart[charIndex]);
+        setDisplayedDynamicText(
+          staticText + currentDynamicPart.slice(0, charIndex + 1)
+        ); // Properly append one character at a time
         charIndex++;
       } else {
         clearInterval(typeInterval); // Stop typing when the sentence is fully typed out
@@ -72,8 +74,7 @@ export default function Home() {
     <main className={styles.main}>
       <div>
         <h1 className={styles.typingSentence}>
-          {staticText}
-          <span className={styles.dynamicText}>{displayedDynamicText}</span>
+          {displayedDynamicText}
           <span className={styles.cursor}>|</span>
         </h1>
         <br />
