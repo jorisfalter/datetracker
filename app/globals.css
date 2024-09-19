@@ -117,28 +117,27 @@ h2 {
 }
 
 
-.typingSentence {
-  font-family: monospace;
+.slidingSentence {
+  display: inline-block;
+  position: relative;
   white-space: nowrap;
 }
 
 .dynamicText {
-  color: #ff6347; /* Change this color as you like (tomato color) */
-  font-weight: bold;
+  display: inline-block;
+  position: relative;
+  animation: slide-in 0.5s forwards; /* Controls slide-in duration */
+  color: blue;
 }
 
-.cursor {
-  border-right: 2px solid;
-  animation: blink-caret 0.75s step-end infinite;
-}
-
-/* Blinking caret animation */
-@keyframes blink-caret {
-  from, to {
-    border-color: transparent;
+@keyframes slide-in {
+  0% {
+    opacity: 0;
+    transform: translateY(20px); /* Start off slightly below */
   }
-  50% {
-    border-color: black;
+  100% {
+    opacity: 1;
+    transform: translateY(0); /* Slide to original position */
   }
 }
 
