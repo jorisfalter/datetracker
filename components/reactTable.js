@@ -122,7 +122,17 @@ export default function EditableReactTable() {
     }
     // Doesn't work yet // Do not prevent the default behavior for arrow keys
     if (colKey === "col4" && (e.key === "ArrowDown" || e.key === "ArrowUp")) {
-      // Let the default dropdown navigation work
+      e.preventDefault(); // Prevent default to handle dropdown ourselves
+      const select = e.target;
+      if (e.key === "ArrowDown") {
+        select.selectedIndex =
+          (select.selectedIndex + 1) % select.options.length;
+      } else {
+        select.selectedIndex =
+          (select.selectedIndex - 1 + select.options.length) %
+          select.options.length;
+      }
+      handleCellChange(rowIdx, "col4", select.value);
     }
   };
 
@@ -209,7 +219,7 @@ export default function EditableReactTable() {
             onChange={(e) => handleCellChange(rowIdx, "col4", e.target.value)}
             onBlur={() => handleCellBlur(rowIdx, "col4")}
             onKeyDown={(e) => handleKeyDown(e, rowIdx, "col4")}
-            // autoFocus // Remove autoFocus to prevent dropdown from closing immediately
+            autoFocus // Re-add autoFocus
             onClick={(e) => e.stopPropagation()} // Stop propagation to prevent blur issues
           >
             <option value="January">January</option>
@@ -226,7 +236,9 @@ export default function EditableReactTable() {
             <option value="December">December</option>
           </select>
         ) : (
-          <span>{info.getValue()}</span>
+          <span onClick={() => setEditingCell({ rowIdx, colKey: "col4" })}>
+            {info.getValue()}
+          </span>
         );
       },
     }),
