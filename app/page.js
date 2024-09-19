@@ -43,7 +43,7 @@ export default function Home() {
       setCurrentSentenceIndex(
         (prevIndex) => (prevIndex + 1) % dynamicParts.length
       );
-    }, 2000); // Rotate every 10 seconds
+    }, 10000); // Rotate every 10 seconds
 
     return () => clearInterval(interval); // Cleanup on unmount
   }, [dynamicParts.length]);
