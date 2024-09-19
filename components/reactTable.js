@@ -7,6 +7,7 @@ import {
   flexRender,
   getCoreRowModel,
 } from "@tanstack/react-table";
+// import styles from "../app/reactTable.module.css";
 
 export default function EditableReactTable() {
   const columnHelper = createColumnHelper();

@@ -50,16 +50,24 @@ export default function Home() {
 
   return (
     <main className={styles.main}>
-      <div>
-        <h1 className={styles.slidingSentence}>
-          {staticText}
+      <div className={styles.container}>
+        <h1 className={styles.title}>
+          <span className={styles.staticText}>{staticText}</span>
           <span className={styles.dynamicText}>
             {dynamicParts[currentSentenceIndex]}
           </span>
         </h1>
-        <br />
-        <h2>Go ahead, enter your important dates in the table:</h2>
-        <br />
+
+        <div className={styles.decorativeElements}>
+          <div className={styles.circle}></div>
+          <div className={styles.square}></div>
+          <div className={styles.triangle}></div>
+        </div>
+
+        <h2 className={styles.subtitle}>
+          Go ahead, enter your important dates in the table:
+        </h2>
+
         <ReactTable />
       </div>
     </main>
