@@ -37,13 +37,13 @@ export default function Home() {
     setContent("");
   };
 
-  // Rotate dynamic parts every 5 seconds
+  // Rotate dynamic parts every 10 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSentenceIndex(
         (prevIndex) => (prevIndex + 1) % dynamicParts.length
       );
-    }, 10000); // Rotate every 10 seconds
+    }, 4000); // Rotate every 4 seconds
 
     return () => clearInterval(interval); // Cleanup on unmount
   }, [dynamicParts.length]);
