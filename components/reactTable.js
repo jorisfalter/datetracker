@@ -16,7 +16,7 @@ export default function EditableReactTable() {
   const [data, setData] = useState([
     { col1: "Fred the Example", col2: "Birthday", col3: 10, col4: "January" },
     {
-      col1: "Tina and Gerard",
+      col1: "Tina and Gerard the couple example",
       col2: "Wedding Anniversary",
       col3: 20,
       col4: "October",

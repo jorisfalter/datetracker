@@ -10,7 +10,7 @@ export default function Home() {
   const [currentSentenceIndex, setCurrentSentenceIndex] = useState(0);
 
   // Static part of the sentence
-  const staticText = "Never forget ";
+  const staticText = "Never Forget ";
 
   // Dynamic parts that change
   const dynamicParts = [
@@ -58,7 +58,7 @@ export default function Home() {
           </span>
         </h1>
         <br />
-        <h2>Go ahead, enter your important dates in the table:</h2>
+        <h2>Go ahead, add your important dates:</h2>
         <br />
         <ReactTable />
       </div>
