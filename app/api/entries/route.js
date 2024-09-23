@@ -22,15 +22,16 @@ export async function POST(req) {
         AND what = ${entry.col2}
         AND dayNum = ${entry.col3}
         AND monthString = ${entry.col4}
-        AND email = ${email};
+        AND email = ${email}
+        AND month_day = ${entry.date};
       `;
 
       // If no duplicates are found, insert the entry
       if (existingEntries.length === 0) {
         console.log(`Inserting new entry for: ${entry.col1}`);
         await database.sql`
-          INSERT INTO entries (who, what, dayNum, monthString, email) 
-          VALUES (${entry.col1}, ${entry.col2}, ${entry.col3}, ${entry.col4}, ${email});
+          INSERT INTO entries (who, what, dayNum, monthString, email, month_day) 
+          VALUES (${entry.col1}, ${entry.col2}, ${entry.col3}, ${entry.col4}, ${email}, ${entry.date});
         `;
       } else {
         console.log(`Duplicate found for: ${entry.col1}, skipping insertion.`);

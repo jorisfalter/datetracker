@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+// i think this is archived
+
 export default function EditableTable() {
   // Initialize a 3x3 table with default empty values
   const [tableData, setTableData] = useState([

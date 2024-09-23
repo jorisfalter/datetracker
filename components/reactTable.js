@@ -43,15 +43,40 @@ export default function EditableReactTable() {
   const submitData = async (updatedData) => {
     if (isValidEmail(email)) {
       try {
+        const dataWithDate = updatedData.map((row) => {
+          const monthIndex =
+            [
+              "January",
+              "February",
+              "March",
+              "April",
+              "May",
+              "June",
+              "July",
+              "August",
+              "September",
+              "October",
+              "November",
+              "December",
+            ].indexOf(row.col4) + 1;
+          const day = row.col3.toString().padStart(2, "0");
+          const month = monthIndex.toString().padStart(2, "0");
+          return {
+            ...row,
+            date: `${month}-${day}`,
+          };
+        });
+        // console.log(dataWithDate);
+
         const response = await fetch("/api/entries", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ data: updatedData, email }),
+          body: JSON.stringify({ data: dataWithDate, email }),
         });
 
-        console.log(JSON.stringify({ data: updatedData, email }));
+        console.log(JSON.stringify({ data: dataWithDate, email }));
 
         if (response.ok) {
           console.log("Data sent to API successfully!");
