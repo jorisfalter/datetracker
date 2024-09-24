@@ -11,7 +11,7 @@ export async function POST(req) {
 
   // Generate a JWT
   const token = jwt.sign({ email }, process.env.JWT_SECRET, {
-    expiresIn: "10h",
+    expiresIn: "10000h",
   });
 
   // Send the JWT to the user's email using Postmark
