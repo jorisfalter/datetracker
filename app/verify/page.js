@@ -1,7 +1,9 @@
 "use client"; // This ensures the component is treated as a Client Component
 
+// this receives the frontend api call to verify the email link, then sends it to the verify api route
+
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 
 const VerifyPage = () => {
   const searchParams = useSearchParams();
@@ -37,4 +39,10 @@ const VerifyPage = () => {
   return <div>Verifying your token...</div>;
 };
 
-export default VerifyPage;
+const VerifyPageWrapper = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <VerifyPage />
+  </Suspense>
+);
+
+export default VerifyPageWrapper;

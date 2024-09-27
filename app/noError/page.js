@@ -5,8 +5,9 @@
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import styles from "../page.module.css";
+import { Suspense } from "react";
 
-export default function ErrorPage() {
+function ErrorPageContent() {
   const searchParams = useSearchParams();
   const errorMessage =
     searchParams.get("message") || "Default Message when no data";
@@ -19,5 +20,13 @@ export default function ErrorPage() {
         Go back to home page
       </Link>
     </div>
+  );
+}
+
+export default function ErrorPageWrapper() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ErrorPageContent />
+    </Suspense>
   );
 }
