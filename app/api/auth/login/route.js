@@ -22,7 +22,7 @@ export async function POST(req) {
     To: email,
     Subject: "Your login link",
     // TextBody: `Click the following link to log in: ${process.env.BASE_URL}/api/auth/verify?token=${token}`,
-    TextBody: `Click the following link to log in: ${process.env.BASE_URL}/?token=${token}`,
+    TextBody: `Click the following link to log in: ${process.env.BASE_URL}/verify?token=${token}`,
   };
 
   try {
