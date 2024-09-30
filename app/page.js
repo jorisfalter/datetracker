@@ -1,11 +1,11 @@
-"use client"; // Add this line to specify that this is a Client Component
+"use client"; // Mark this as a client component
 
 import styles from "./page.module.css";
 import ReactTable from "../components/reactTable";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
-export default function Home() {
+function HomeContent() {
   const [entries, setEntries] = useState([]);
   const [content, setContent] = useState("");
   const [currentSentenceIndex, setCurrentSentenceIndex] = useState(0);
@@ -41,17 +41,18 @@ export default function Home() {
     setContent("");
   };
 
-  // Rotate dynamic parts every 10 seconds
+  // Rotate dynamic parts every 4 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSentenceIndex(
         (prevIndex) => (prevIndex + 1) % dynamicParts.length
       );
-    }, 4000); // Rotate every 4 seconds
+    }, 4000);
 
-    return () => clearInterval(interval); // Cleanup on unmount
+    return () => clearInterval(interval);
   }, [dynamicParts.length]);
 
+  // Handle verification data from URL
   useEffect(() => {
     const encodedData = searchParams.get("verificationData");
     if (encodedData) {
@@ -71,7 +72,7 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <div>
-        {/* ... existing code ... */}
+        {/* Your existing code goes here */}
         {verificationData && verificationData.data ? (
           <div>
             <p>Verification successful for:</p>
@@ -89,5 +90,14 @@ export default function Home() {
         <ReactTable />
       </div>
     </main>
+  );
+}
+
+// Wrapper for Suspense
+export default function Home() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <HomeContent />
+    </Suspense>
   );
 }
