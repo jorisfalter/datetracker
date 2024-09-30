@@ -56,30 +56,33 @@ export default function Home() {
     const encodedData = searchParams.get("verificationData");
     if (encodedData) {
       try {
-        const decodedData = JSON.parse(atob(encodedData));
+        const decodedData = JSON.parse(decodeURIComponent(encodedData));
         setVerificationData(decodedData);
         console.log("Decoded verification data:", decodedData);
       } catch (error) {
         console.error("Error decoding verification data:", error);
         setVerificationData(null);
       }
+    } else {
+      setVerificationData(null);
     }
   }, [searchParams]);
 
   return (
     <main className={styles.main}>
       <div>
-        <h1 className={styles.slidingSentence}>
-          {staticText}
-          <span className={styles.dynamicText}>
-            {dynamicParts[currentSentenceIndex]}
-          </span>
-        </h1>
-        <br />
-        <h2>Go ahead, add your important dates:</h2>
-        <br />
-        {verificationData ? (
-          <p>Verification successful for: {verificationData.email}</p>
+        {/* ... existing code ... */}
+        {verificationData && verificationData.data ? (
+          <div>
+            <p>Verification successful for:</p>
+            <ul>
+              {verificationData.data.map((entry, index) => (
+                <li key={index}>
+                  {entry.email} (ID: {entry.id})
+                </li>
+              ))}
+            </ul>
+          </div>
         ) : (
           <p>No verification data available</p>
         )}
