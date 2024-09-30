@@ -22,7 +22,8 @@ const VerifyPage = () => {
         router.push(`/error?message=${data.error}`);
       } else {
         // Handle successful verification, maybe redirect to dashboard
-        router.push("/");
+        const encodedData = encodeURIComponent(JSON.stringify(data));
+        router.push(`/?verificationData=${encodedData}`);
         // for debugging:
         // const encodedData = encodeURIComponent(JSON.stringify(data));
         // router.push(`/noError?message=${encodedData}`);
