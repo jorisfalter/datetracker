@@ -87,7 +87,7 @@ function HomeContent() {
         ) : (
           <p>No verification data available</p>
         )}
-        <ReactTable />
+        <ReactTable verificationData={verificationData} />
       </div>
     </main>
   );

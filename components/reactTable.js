@@ -9,7 +9,7 @@ import {
 } from "@tanstack/react-table";
 // import styles from "../app/reactTable.module.css";
 
-export default function EditableReactTable() {
+export default function EditableReactTable({ verificationData }) {
   const columnHelper = createColumnHelper();
 
   // Initial table data
@@ -275,6 +275,15 @@ export default function EditableReactTable() {
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
+
+  useEffect(() => {
+    if (verificationData) {
+      // Handle verification data (e.g., set it in state or validate)
+      console.log("Received verification data:", verificationData);
+    } else {
+      console.log("no verification data");
+    }
+  }, [verificationData]);
 
   return (
     <div
