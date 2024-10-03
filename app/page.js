@@ -59,9 +59,9 @@ function HomeContent() {
       try {
         const decodedData = JSON.parse(decodeURIComponent(encodedData));
         setVerificationData(decodedData);
-        console.log("Decoded verification data:", decodedData);
+        // console.log("Decoded verification data:", decodedData);
       } catch (error) {
-        console.error("Error decoding verification data:", error);
+        // console.error("Error decoding verification data:", error);
         setVerificationData(null);
       }
     } else {

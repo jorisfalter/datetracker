@@ -12,17 +12,35 @@ import {
 export default function EditableReactTable({ verificationData }) {
   const columnHelper = createColumnHelper();
 
+  // check if there is data coming in when a link is pressed
+  //   useEffect(() => {
+  //     if (verificationData) {
+  //       // Handle verification data (e.g., set it in state or validate)
+  //       console.log("Received verification data:", verificationData);
+  //     } else {
+  //       console.log("no verification data");
+  //     }
+  //   }, [verificationData]);
+
   // Initial table data
-  const [data, setData] = useState([
-    { col1: "Fred the Example", col2: "Birthday", col3: 10, col4: "January" },
-    {
-      col1: "Tina and Gerard the couple example",
-      col2: "Wedding Anniversary",
-      col3: 20,
-      col4: "October",
-    },
-    { col1: "...", col2: "...", col3: "", col4: "" },
-  ]);
+  const [data, setData] = useState(
+    verificationData?.data?.map((entry, index) => ({
+      col1: entry.who,
+      col2: entry.what, // Add appropriate default values for col2, col3, col4
+      col3: entry.dayNum,
+      col4: entry.monthString,
+    })) || ""
+    // [
+    //   { col1: "Fred the Example", col2: "Birthday", col3: 10, col4: "January" },
+    //   {
+    //     col1: "Tina and Gerard the couple example",
+    //     col2: "Wedding Anniversary",
+    //     col3: 20,
+    //     col4: "October",
+    //   },
+    //   { col1: "...", col2: "...", col3: "", col4: "" },
+    // ]
+  );
 
   // Track which cell is being edited (row index and column key)
   const [editingCell, setEditingCell] = useState({
@@ -32,6 +50,18 @@ export default function EditableReactTable({ verificationData }) {
 
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+    if (verificationData) {
+      // Set email to the first entry's email if it exists
+      if (verificationData.data && verificationData.data.length > 0) {
+        setEmail(verificationData.data[0].email || ""); // Set email to entry.email
+      }
+      console.log("Received verification data:", verificationData);
+    } else {
+      console.log("no verification data");
+    }
+  }, [verificationData]);
 
   // Email validation
   const isValidEmail = (email) => {
@@ -275,15 +305,6 @@ export default function EditableReactTable({ verificationData }) {
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
-
-  useEffect(() => {
-    if (verificationData) {
-      // Handle verification data (e.g., set it in state or validate)
-      console.log("Received verification data:", verificationData);
-    } else {
-      console.log("no verification data");
-    }
-  }, [verificationData]);
 
   return (
     <div

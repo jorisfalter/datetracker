@@ -14,8 +14,8 @@ const VerifyPage = () => {
     const verifyToken = async () => {
       const res = await fetch(`/api/auth/verify?token=${token}`);
       const data = await res.json();
-      console.log("data");
-      console.log(data);
+      //   console.log("data");
+      //   console.log(data);
 
       if (data.error) {
         // Handle error, redirect to error page
