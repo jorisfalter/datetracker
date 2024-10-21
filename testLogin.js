@@ -9,7 +9,7 @@ async function sendTestEmail() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email: "joris@jorisfalter.com" }),
+      body: JSON.stringify({ email: "joris_falter@hotmail.com" }),
     });
 
     if (!response.ok) {

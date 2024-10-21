@@ -1,3 +1,5 @@
+// copy to double check ChatGPT output
+
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -7,48 +9,49 @@ import {
   flexRender,
   getCoreRowModel,
 } from "@tanstack/react-table";
+// import styles from "../app/reactTable.module.css";
 
 export default function EditableReactTable({ verificationData }) {
   const columnHelper = createColumnHelper();
 
-  // Initial table data (default values before verificationData arrives)
-  const [data, setData] = useState([
-    { col1: "Fred the Example", col2: "Birthday", col3: 10, col4: "January" },
-    {
-      col1: "Tina and Gerard the couple example",
-      col2: "Wedding Anniversary",
-      col3: 20,
-      col4: "October",
-    },
-    { col1: "...", col2: "...", col3: "", col4: "" },
-  ]);
+  // Initial table data
+  const [data, setData] = useState(
+    verificationData?.data?.map((entry, index) => ({
+      col1: entry.who,
+      col2: entry.what, // Add appropriate default values for col2, col3, col4
+      col3: entry.dayNum,
+      col4: entry.monthString,
+    })) || // ""
+    [
+      { col1: "Fred the Example", col2: "Birthday", col3: 10, col4: "January" },
+      {
+        col1: "Tina and Gerard the couple example",
+        col2: "Wedding Anniversary",
+        col3: 20,
+        col4: "October",
+      },
+      { col1: "...", col2: "...", col3: "", col4: "" },
+    ]
+  );
 
-  const [email, setEmail] = useState(""); // Empty email until verificationData arrives
+  // Track which cell is being edited (row index and column key)
   const [editingCell, setEditingCell] = useState({
     rowIdx: null,
     colKey: null,
   });
 
-  // Use useEffect to update table data when verificationData arrives
+  const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
   useEffect(() => {
-    if (verificationData && verificationData.data) {
-      const mappedData = verificationData.data.map((entry) => ({
-        col1: entry.who,
-        col2: entry.what,
-        col3: entry.dayNum,
-        col4: entry.monthString,
-      }));
-
-      setData(mappedData);
-
+    if (verificationData) {
       // Set email to the first entry's email if it exists
-      if (verificationData.data.length > 0) {
-        setEmail(verificationData.data[0].email || "");
+      if (verificationData.data && verificationData.data.length > 0) {
+        setEmail(verificationData.data[0].email || ""); // Set email to entry.email
       }
-
       console.log("Received verification data:", verificationData);
     } else {
-      console.log("No verification data");
+      console.log("no verification data");
     }
   }, [verificationData]);
 
@@ -82,9 +85,10 @@ export default function EditableReactTable({ verificationData }) {
           const month = monthIndex.toString().padStart(2, "0");
           return {
             ...row,
-            date: `${month}-${day}`,
+            date: ${month}-${day},
           };
         });
+        // console.log(dataWithDate);
 
         const response = await fetch("/api/entries", {
           method: "POST",
@@ -93,6 +97,8 @@ export default function EditableReactTable({ verificationData }) {
           },
           body: JSON.stringify({ data: dataWithDate, email }),
         });
+
+        console.log(JSON.stringify({ data: dataWithDate, email }));
 
         if (response.ok) {
           console.log("Data sent to API successfully!");
@@ -114,16 +120,22 @@ export default function EditableReactTable({ verificationData }) {
     setData(updatedData);
   };
 
+  // Handle cell blur event (when user clicks away from a cell)
   const handleCellBlur = (rowIdx, colKey) => {
+    // Submit data when the user finishes editing a cell
     submitData(data);
     setEditingCell({ rowIdx: null, colKey: null });
   };
 
+  // Handle email input change
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
+    setSubmitted(false);
   };
 
+  // Handle email input blur (when user clicks away from the email input)
   const handleEmailBlur = () => {
+    // Submit data when the user finishes entering the email
     submitData(data);
   };
 
@@ -202,6 +214,7 @@ export default function EditableReactTable({ verificationData }) {
         );
       },
     }),
+
     columnHelper.accessor("col2", {
       header: "What?",
       cell: (info) => {
@@ -221,6 +234,7 @@ export default function EditableReactTable({ verificationData }) {
         );
       },
     }),
+
     columnHelper.accessor("col3", {
       header: "Day",
       cell: (info) => {
@@ -240,6 +254,7 @@ export default function EditableReactTable({ verificationData }) {
         );
       },
     }),
+
     columnHelper.accessor("col4", {
       header: "Month",
       cell: (info) => {
@@ -251,7 +266,8 @@ export default function EditableReactTable({ verificationData }) {
             onChange={(e) => handleCellChange(rowIdx, "col4", e.target.value)}
             onBlur={() => handleCellBlur(rowIdx, "col4")}
             onKeyDown={(e) => handleKeyDown(e, rowIdx, "col4")}
-            autoFocus
+            autoFocus // Re-add autoFocus
+            onClick={(e) => e.stopPropagation()} // Stop propagation to prevent blur issues
           >
             <option value="January">January</option>
             <option value="February">February</option>
@@ -267,12 +283,15 @@ export default function EditableReactTable({ verificationData }) {
             <option value="December">December</option>
           </select>
         ) : (
-          <span>{info.getValue()}</span>
+          <span onClick={() => setEditingCell({ rowIdx, colKey: "col4" })}>
+            {info.getValue()}
+          </span>
         );
       },
     }),
   ];
 
+  // Initialize table instance
   const table = useReactTable({
     data,
     columns,
