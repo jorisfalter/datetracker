@@ -107,6 +107,50 @@ export default function EditableReactTable({ verificationData }) {
     }
   };
 
+  // Function to delete entry from the frontend and backend
+  const deleteEntry = async (rowData) => {
+    // Change parameter to rowData
+    console.log("Deleting entry:", rowData); // Log the row data
+    // Delete from frontend
+    setData((prevData) =>
+      prevData.filter(
+        (entry) =>
+          entry.col1 !== rowData.original.col1 &&
+          entry.col2 !== rowData.original.col2 &&
+          entry.col3 !== rowData.original.col3 &&
+          entry.col4 !== rowData.original.col4
+      )
+    );
+    console.log("rowData.original");
+    console.log(rowData.original);
+    // Delete from the backend (database)
+    try {
+      const response = await fetch(`/api/entries`, {
+        // Update endpoint if necessary
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          who: rowData.original.col1,
+          what: rowData.original.col2,
+          dayNum: rowData.original.col3,
+          monthString: rowData.original.col4,
+          email,
+          // month_day: rowData.date,
+        }),
+      });
+
+      if (response.ok) {
+        console.log(`Entry deleted successfully`);
+      } else {
+        console.error(`Failed to delete entry`);
+      }
+    } catch (error) {
+      console.error(`Error deleting entry:`, error);
+    }
+  };
+
   // Handle cell value changes
   const handleCellChange = (rowIdx, colKey, value) => {
     const updatedData = [...data];
@@ -271,6 +315,17 @@ export default function EditableReactTable({ verificationData }) {
         );
       },
     }),
+    {
+      header: "Delete",
+      cell: ({ row }) => (
+        <button
+          onClick={() => deleteEntry(row)}
+          style={{ color: "red", cursor: "pointer" }}
+        >
+          X
+        </button>
+      ),
+    },
   ];
 
   const table = useReactTable({

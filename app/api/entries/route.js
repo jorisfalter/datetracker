@@ -50,3 +50,45 @@ export async function POST(req) {
     return NextResponse.json({ message: "Failed to insert data", error });
   }
 }
+
+export async function DELETE(req) {
+  console.log("we're in the delete route!");
+  const { who, what, dayNum, monthString, email, month_day } = await req.json();
+
+  // !!!only the email comes through
+  console.log([who, what, dayNum, monthString, email]);
+
+  // Initialize connection to SQLiteCloud using environment variables
+  const database = new Database(process.env.SQLITECLOUD_URL);
+
+  try {
+    console.log("Deleting entry in the entries > route file ...");
+
+    // Execute the deletion query
+    const result = await database.sql`
+      USE DATABASE chinook.sqlite;
+      DELETE FROM entries 
+      WHERE who = ${who} 
+      AND what = ${what}
+      AND dayNum = ${dayNum}
+      AND monthString = ${monthString}
+      AND email = ${email}
+    `;
+
+    // Check if any rows were affected
+    if (result.changes > 0) {
+      return NextResponse.json({ message: "Entry deleted successfully." });
+    } else {
+      return NextResponse.json(
+        { message: "No entry found to delete." },
+        { status: 404 }
+      );
+    }
+  } catch (error) {
+    console.error("Error deleting entry:", error);
+    return NextResponse.json(
+      { message: "Failed to delete entry", error },
+      { status: 500 }
+    );
+  }
+}
