@@ -2,6 +2,7 @@
 
 import styles from "./page.module.css";
 import ReactTable from "../components/reactTable";
+import SignIn from "../components/signIn";
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
@@ -87,6 +88,27 @@ function HomeContent() {
         ) : (
           <p>No verification data available</p>
         )} */}
+        <div className={styles.rotatingH1}>
+          <h1 className={styles.wordRotateSentence}>
+            {staticText}
+            <span className={styles.wordRotateWrapper}>
+              {dynamicParts.map((part, index) => (
+                <span
+                  key={index}
+                  className={`${styles.wordRotateItem} ${
+                    index === currentSentenceIndex ? styles.active : ""
+                  }`}
+                >
+                  {part}
+                </span>
+              ))}
+            </span>
+          </h1>
+        </div>
+        <br />
+        <h2>Go ahead, enter your important dates in the table:</h2>
+        <br />
+        <SignIn />
         <ReactTable verificationData={verificationData} />
       </div>
     </main>

@@ -2,10 +2,54 @@
   min-height: 100vh;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   display: flex;
+  flex-direction: column; /* Stack items vertically */
+
   justify-content: center;
   align-items: center;
   font-family: 'Arial', sans-serif;
 }
+
+.rotatingH1{
+  text-align:center;
+}
+/* Center the title (h1) */
+.wordRotateSentence {
+  text-align: center; /* Ensure the text is centered */
+  font-size: 2rem; /* Adjust as per your design */
+}
+
+.wordRotateSentence {
+  display: inline-block;
+  position: relative;
+  white-space: nowrap;
+}
+
+.wordRotateWrapper {
+  display: inline-block;
+  position: relative;
+  height: 1.2em; /* Set the height to fit the text */
+  overflow: hidden;
+  vertical-align: top;
+}
+
+.wordRotateItem {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  color:red;
+}
+
+.wordRotateItem.active {
+  display: block;
+  position: relative;
+}
+
+/* Center the table */  /* Ensure the table is centered horizontally */
+/* table {
+  margin: 0 auto;
+} */
 
 .description {
   display: inherit;
