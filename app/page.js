@@ -73,7 +73,7 @@ function HomeContent() {
     <main className={styles.main}>
       <div>
         {/* Your existing code goes here */}
-        {verificationData && verificationData.data ? (
+        {/* {verificationData && verificationData.data ? (
           <div>
             <p>Verification successful for:</p>
             <ul>
@@ -86,7 +86,7 @@ function HomeContent() {
           </div>
         ) : (
           <p>No verification data available</p>
-        )}
+        )} */}
         <ReactTable verificationData={verificationData} />
       </div>
     </main>
