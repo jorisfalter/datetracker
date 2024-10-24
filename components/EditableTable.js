@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-// i think this is archived
+// ARCHIVE I THINK
 
 export default function EditableTable() {
   // Initialize a 3x3 table with default empty values
