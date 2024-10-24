@@ -70,6 +70,8 @@ function HomeContent() {
     }
   }, [searchParams]);
 
+  const isLoggedIn = verificationData !== null; // Check if user is logged in
+
   return (
     <main className={styles.main}>
       <div>
@@ -108,7 +110,7 @@ function HomeContent() {
         <br />
         <h2>Go ahead, enter your important dates in the table:</h2>
         <br />
-        <SignIn />
+        {!isLoggedIn && <SignIn />}{" "}
         <ReactTable verificationData={verificationData} />
       </div>
     </main>
