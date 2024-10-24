@@ -3,6 +3,7 @@
 import styles from "./page.module.css";
 import ReactTable from "../components/reactTable";
 import SignIn from "../components/signIn";
+import AirtableAlternative from "../components/airtableAlternative";
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
@@ -108,10 +109,13 @@ function HomeContent() {
           </h1>
         </div>
         <br />
-        <h2>Go ahead, enter your important dates in the table:</h2>
+        <h2>Go ahead, enter your important dates:</h2>
         <br />
         {!isLoggedIn && <SignIn />}{" "}
         <ReactTable verificationData={verificationData} />
+      </div>
+      <div>
+        <AirtableAlternative />
       </div>
     </main>
   );
