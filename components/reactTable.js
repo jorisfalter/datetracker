@@ -112,15 +112,19 @@ export default function EditableReactTable({ verificationData }) {
     // Change parameter to rowData
     console.log("Deleting entry:", rowData); // Log the row data
     // Delete from frontend
-    setData((prevData) =>
-      prevData.filter(
+    setData((prevData) => {
+      const filteredData = prevData.filter(
         (entry) =>
-          entry.col1 !== rowData.original.col1 &&
-          entry.col2 !== rowData.original.col2 &&
-          entry.col3 !== rowData.original.col3 &&
-          entry.col4 !== rowData.original.col4
-      )
-    );
+          !(
+            entry.col1 == rowData.original.col1 &&
+            entry.col2 == rowData.original.col2 &&
+            entry.col3 == rowData.original.col3 &&
+            entry.col4 == rowData.original.col4
+          )
+      );
+      console.log("Updated data after deletion:", filteredData); // Log the updated data
+      return filteredData;
+    });
     console.log("rowData.original");
     console.log(rowData.original);
     // Delete from the backend (database)
